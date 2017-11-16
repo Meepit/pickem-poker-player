@@ -14,8 +14,8 @@ class Hand(object):
         self._cards = screen.get_card_locations(screen.screen)
         self.suits = Suits
 
-    def get_cards(self):
-        return [self._cards["card{0}".format(i)]["coord"] for i in range(1, 5)]
+    def get_hand(self):
+        return [[self._cards["card{0}".format(i)]["rank"], self._cards["card{0}".format(i)]["suit"]] for i in range(1, 5)]
 
     def get_card_coord(self, card_num):
         try:
@@ -85,3 +85,12 @@ class Hand(object):
             return "C" if abs_diff_club < abs_diff_spade else "S"
 
 
+screen = Screen(1)
+hand = Hand(screen)
+print(hand._cards.keys())
+for i in range(1,5):
+    rank = hand.get_rank(i)
+    hand.set_card_rank(i, rank)
+    suit = hand.get_suit(i)
+    hand.set_card_suit(i, suit)
+print(hand.get_hand())
