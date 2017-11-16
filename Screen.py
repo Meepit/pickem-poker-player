@@ -7,6 +7,7 @@ import numpy as np
 
 class Screen(object):
     def __init__(self, number, path=""):
+        self.screen_num = number
         self._res = (win32api.GetSystemMetrics(0), win32api.GetSystemMetrics(1))
         self._x_offset = 0  # Half the horizontal res
         self._y_offset = 0  # Half the vertical res
