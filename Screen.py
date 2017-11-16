@@ -76,5 +76,9 @@ class Screen(object):
         return coords
 
     def get_deal_button(self, coords):
+        """
+        :param coords: Dict, Card coordinates
+        :return: Tuple, dealbutton coordinates.
+        """
         deal_button = (coords["card3"][0], coords["card3"][3] + ((coords["card3"][3] - coords["card3"][1]) // 3))
         return deal_button
