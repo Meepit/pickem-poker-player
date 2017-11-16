@@ -7,11 +7,10 @@ import numpy as np
 
 class Screen(object):
     def __init__(self, number, path=""):
-        self.number = number
         self._res = (win32api.GetSystemMetrics(0), win32api.GetSystemMetrics(1))
         self._x_offset = 0  # Half the horizontal res
         self._y_offset = 0  # Half the vertical res
-        self.screen = self.get_screen()
+        self.screen = self.get_screen(number)
         if path:
             pytesseract.pytesseract.tesseract_cmd = path
         else:
@@ -57,19 +56,25 @@ class Screen(object):
         # Giving coordinates of cards in order.
         card_boxes = sorted(card_boxes)[:4]
         card_boxes = sorted([i[1] for i in card_boxes])
-        coords = {}
-        coords["card1"] = (self._x_offset + card_boxes[0][0], self._y_offset + card_boxes[0][1],
-                                self._x_offset + card_boxes[0][0] + card_boxes[0][2],
-                                self._y_offset + card_boxes[0][1] + card_boxes[0][3])
-        coords["card2"] = (self._x_offset + card_boxes[1][0], self._y_offset + card_boxes[1][1],
-                                self._x_offset + card_boxes[1][0] + card_boxes[1][2],
-                                self._y_offset + card_boxes[1][1] + card_boxes[1][3])
-        coords["card3"] = (self._x_offset + card_boxes[2][0], self._y_offset + card_boxes[2][1],
-                                self._x_offset + card_boxes[2][0] + card_boxes[2][2],
-                                self._y_offset + card_boxes[2][1] + card_boxes[2][3])
-        coords["card4"] = (self._x_offset + card_boxes[3][0], self._y_offset + card_boxes[3][1],
-                                self._x_offset + card_boxes[3][0] + card_boxes[3][2],
-                                self._y_offset + card_boxes[3][1] + card_boxes[3][3])
-        coords["deal_button"] = (coords["card3"][0], coords["card3"][3] + ((coords["card3"][3] - coords["card3"][1]) // 3))
+        coords = dict()
+        coords["card1"] = {"coord": (self._x_offset + card_boxes[0][0],
+                                     self._y_offset + card_boxes[0][1],
+                                     self._x_offset + card_boxes[0][0] + card_boxes[0][2],
+                                     self._y_offset + card_boxes[0][1] + card_boxes[0][3])}
+        coords["card2"] = {"coord": (self._x_offset + card_boxes[1][0],
+                                     self._y_offset + card_boxes[1][1],
+                                     self._x_offset + card_boxes[1][0] + card_boxes[1][2],
+                                     self._y_offset + card_boxes[1][1] + card_boxes[1][3])}
+        coords["card3"] = {"coord": (self._x_offset + card_boxes[2][0],
+                                     self._y_offset + card_boxes[2][1],
+                                     self._x_offset + card_boxes[2][0] + card_boxes[2][2],
+                                     self._y_offset + card_boxes[2][1] + card_boxes[2][3])}
+        coords["card4"] = {"coord": (self._x_offset + card_boxes[3][0],
+                                     self._y_offset + card_boxes[3][1],
+                                     self._x_offset + card_boxes[3][0] + card_boxes[3][2],
+                                     self._y_offset + card_boxes[3][1] + card_boxes[3][3])}
         return coords
 
+    def get_deal_button(self, coords):
+        deal_button = (coords["card3"][0], coords["card3"][3] + ((coords["card3"][3] - coords["card3"][1]) // 3))
+        return deal_button
