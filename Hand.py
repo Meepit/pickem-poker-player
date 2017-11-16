@@ -54,6 +54,8 @@ class Hand(object):
         rank_str = image_to_string(rank, config='-psm 10000 -c tessedit_char_whitelist=0123456789JQKA')
         if rank_str == "10":
             rank_str = "T"
+        if rank_str == "0"
+            rank_str = "Q"
         if len(rank_str) == 0 or len(rank_str) > 1:
             print("There was a problem detecting rank. Detected as {0}. Retrying".format(rank_str))
             time.sleep(1)
