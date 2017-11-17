@@ -41,7 +41,15 @@ class Hand(object):
         except KeyError:
             print("Card {0} has no rank set".format(card_num))
 
-    def get_rank(self, card_num):
+    def get_card_suit(self, card_num):
+        if card_num not in range(1, 5):
+            raise ValueError('card_num must be an integer between 1-4 inclusive')
+        try:
+            return self._cards["card{0}".format(card_num)]["suit"]
+        except KeyError:
+            print("Card {0} has no suit set".format(card_num))
+
+    def determine_rank(self, card_num):
         if card_num not in range(1, 5):
             raise ValueError('card_num must be an integer between 1-4 inclusive')
         # Rank makes up about 27% of the card, suit makes up about 25%
@@ -54,7 +62,7 @@ class Hand(object):
         rank_str = image_to_string(rank, config='-psm 10000 -c tessedit_char_whitelist=0123456789JQKA')
         if rank_str == "10":
             rank_str = "T"
-        if rank_str == "0"
+        if rank_str == "0":
             rank_str = "Q"
         if len(rank_str) == 0 or len(rank_str) > 1:
             print("There was a problem detecting rank. Detected as {0}. Retrying".format(rank_str))
@@ -62,7 +70,7 @@ class Hand(object):
             return self.get_rank(card_num)
         return rank_str
 
-    def get_suit(self, card_num):
+    def determine_suit(self, card_num):
         if card_num not in range(1, 5):
             raise ValueError('card_num must be an integer between 1-4 inclusive')
         coords = self.get_card_coord(card_num)
@@ -72,7 +80,7 @@ class Hand(object):
         pixel_colour = suit.getpixel((suit_offset // 2, suit_offset // 2))
         suit = suit.convert("L")
         suit = suit.resize((30, 30))
-        suit_filename = "screen" + str(self.screen.screen_num) + "_card" + str(i) + ".png"
+        suit_filename = "screen" + str(self.screen.screen_num) + "_card" + str(card_num) + ".png"
         suit.save("detections/" + suit_filename)
         suit_filesize = os.stat("detections/" + suit_filename).st_size
         if pixel_colour[0] > 165:  # red suit
@@ -85,14 +93,3 @@ class Hand(object):
             if self.get_card_rank(card_num) == "Q":  # Bottom part of Queen clips into suit causing misdetection.
                 abs_diff_spade = abs(suit_filesize - self.suits["q_spade"])
             return "C" if abs_diff_club < abs_diff_spade else "S"
-
-
-screen = Screen(1)
-hand = Hand(screen)
-print(hand._cards.keys())
-for i in range(1,5):
-    rank = hand.get_rank(i)
-    hand.set_card_rank(i, rank)
-    suit = hand.get_suit(i)
-    hand.set_card_suit(i, suit)
-print(hand.get_hand())

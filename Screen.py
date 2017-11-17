@@ -82,4 +82,5 @@ class Screen(object):
         :param coords: Dict, Card coordinates
         :return: Tuple, dealbutton coordinates.
         """
-        self._deal_button = (coords["card3"][0], coords["card3"][3] + ((coords["card3"][3] - coords["card3"][1]) // 3))
+        coord = coords["card3"]["coord"]
+        self._deal_button = (coord[0], coord[3] + ((coord[3] - coord[1]) // 3))
