@@ -67,7 +67,7 @@ class Hand(object):
         if len(rank_str) == 0 or len(rank_str) > 1:
             print("There was a problem detecting rank. Detected as {0}. Retrying".format(rank_str))
             time.sleep(1)
-            return self.get_card_rank(card_num)
+            return self.determine_rank(card_num)
         return rank_str
 
     def determine_suit(self, card_num):
@@ -91,6 +91,7 @@ class Hand(object):
             abs_diff_spade = abs(suit_filesize - self.suits["spade"])
             abs_diff_club = abs(suit_filesize - self.suits["club"])
             if self.get_card_rank(card_num) == "Q":  # Bottom part of Queen clips into suit causing misdetection.
+                print("Checking Q")
                 abs_diff_spade = abs(suit_filesize - self.suits["q_spade"])
             return "C" if abs_diff_club < abs_diff_spade else "S"
 
@@ -100,7 +101,7 @@ class Hand(object):
         :param img: PIL image object containing entire screen.
         :return: ready, bool
         """
-        img = self.screen.get_screen(self.screen.screen_num)
+        img = ImageGrab.grab()
         ready = False
         for i in range(1, 5):
             coord = self.get_card_coord(i)

@@ -47,10 +47,10 @@ class Bot(object):
             self._queue.put(coord)
             return
         if card == 3:
-            location = self.hand.get_card_coord(3)
+            location = self._hand.get_card_coord(3)
             self._queue.put((location[0] + 20, location[1] + 20))
         elif card == 4:
-            location = self.hand.get_card_coord(4)
+            location = self._hand.get_card_coord(4)
             self._queue.put((location[0] + 20, location[1] + 20))
 
     def start(self):
