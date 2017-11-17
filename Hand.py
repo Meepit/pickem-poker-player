@@ -67,7 +67,7 @@ class Hand(object):
         if len(rank_str) == 0 or len(rank_str) > 1:
             print("There was a problem detecting rank. Detected as {0}. Retrying".format(rank_str))
             time.sleep(1)
-            return self.get_rank(card_num)
+            return self.get_card_rank(card_num)
         return rank_str
 
     def determine_suit(self, card_num):

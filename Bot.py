@@ -1,6 +1,8 @@
 from Hand import Hand
 from Screen import Screen
 import requests
+from PIL import ImageGrab
+import time
 
 
 class Bot(object):
@@ -52,24 +54,36 @@ class Bot(object):
             self._queue.put((location[0] + 20, location[1] + 20))
 
     def start(self):
-        # Get deal button
-        deal_button = self._screen.deal_button
-        deal_button_pixel_colour = deal_button.getpixel((2, 2))[0]
-        if deal_button_pixel_colour <= 250:
-            print("\tWaiting for deal button..")
-        while not deal_button.getpixel((2, 2))[0] >= 200:  # Deal button not ready
-            deal_button = ImageGrab.grab((deal_button[0], deal_button[1], deal_button[0] + 3, deal_button[1] + 3))
-        self.add_to_queue(self._screen.deal_button)
+        while True:
+            # Get deal button
+            deal_button_xy = self._screen.deal_button
+            deal_button = ImageGrab.grab((deal_button_xy[0], deal_button_xy[1], deal_button_xy[0] + 3, deal_button_xy[1] +3))
+            deal_button_pixel_colour = deal_button.getpixel((2, 2))[0]
+            if deal_button_pixel_colour <= 250:
+                print("\tWaiting for deal button..")
+            while not deal_button.getpixel((2, 2))[0] >= 200:  # Deal button not ready
+                deal_button = ImageGrab.grab((deal_button_xy[0], deal_button_xy[1], deal_button_xy[0] + 3, deal_button_xy[1] + 3))
+            self.add_to_queue(coord=self._screen.deal_button)
+            # end deal button section
+            img = ImageGrab.grab()
+            print("Waiting for cards")
+            while not self._hand.get_cards_status():
+                pass
+            time.sleep(0.5)  # failsafe
+            # get card ranks and suits
+            for i in range(1, 5):
+                rank = self._hand.determine_rank(i)
+                self._hand.set_card_rank(i, rank)
+                suit = self._hand.determine_suit(i)
+                self._hand.set_card_suit(i, suit)
+            print(self._hand.get_hand())
+            action = self.calculate_action()
+            self.add_to_queue(card=action)
+            print("Choosing {0}".format(action))
+
+
 
 
 screen = Screen(1)
 hand = Hand(screen)
 bot = Bot(hand, screen, "q")
-#for i in range(1,5):
-#    rank = hand.determine_rank(i)
-#    hand.set_card_rank(i, rank)
-#    suit = hand.determine_suit(i)
-#    hand.set_card_suit(i, suit)
-#print(hand.get_hand())
-#print(bot.calculate_action())
-print(hand.get_cards_status())
