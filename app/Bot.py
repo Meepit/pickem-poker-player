@@ -55,17 +55,6 @@ class Bot(object):
 
     def start(self):
         while True:
-            # Get deal button
-            deal_button_xy = self._screen.deal_button
-            deal_button = ImageGrab.grab((deal_button_xy[0], deal_button_xy[1], deal_button_xy[0] + 3, deal_button_xy[1] +3))
-            deal_button_pixel_colour = deal_button.getpixel((2, 2))[0]
-            if deal_button_pixel_colour <= 250:
-                print("\tWaiting for deal button..")
-            while not deal_button.getpixel((2, 2))[0] >= 200:  # Deal button not ready
-                deal_button = ImageGrab.grab((deal_button_xy[0], deal_button_xy[1], deal_button_xy[0] + 3, deal_button_xy[1] + 3))
-            self.add_to_queue(coord=self._screen.deal_button)
-            # end deal button section
-            img = ImageGrab.grab()
             print("Waiting for cards")
             while not self._hand.get_cards_status():
                 pass
@@ -80,10 +69,15 @@ class Bot(object):
             action = self.calculate_action()
             self.add_to_queue(card=action)
             print("Choosing {0}".format(action))
+            # Get deal button
+            deal_button_xy = self._screen.deal_button
+            deal_button = ImageGrab.grab((deal_button_xy[0], deal_button_xy[1], deal_button_xy[0] + 3, deal_button_xy[1] +3))
+            deal_button_pixel_colour = deal_button.getpixel((2, 2))[0]
+            if deal_button_pixel_colour <= 250:
+                print("\tWaiting for deal button..")
+            while not deal_button.getpixel((2, 2))[0] >= 200:  # Deal button not ready
+                deal_button = ImageGrab.grab((deal_button_xy[0], deal_button_xy[1], deal_button_xy[0] + 3, deal_button_xy[1] + 3))
+            self.add_to_queue(coord=self._screen.deal_button)
+            # end deal button section
 
 
-
-
-screen = Screen(1)
-hand = Hand(screen)
-bot = Bot(hand, screen, "q")
