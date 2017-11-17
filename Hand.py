@@ -93,3 +93,22 @@ class Hand(object):
             if self.get_card_rank(card_num) == "Q":  # Bottom part of Queen clips into suit causing misdetection.
                 abs_diff_spade = abs(suit_filesize - self.suits["q_spade"])
             return "C" if abs_diff_club < abs_diff_spade else "S"
+
+    def get_cards_status(self):
+        """
+        Checks the pixel colour of the tops of all cards, if white and if no middle card then cards are ready.
+        :param img: PIL image object containing entire screen.
+        :return: ready, bool
+        """
+        img = self.screen.get_screen(self.screen.screen_num)
+        ready = False
+        for i in range(1, 5):
+            coord = self.get_card_coord(i)
+            pixel_colour = img.getpixel((coord[0] + 55, coord[1] + 2))
+            if pixel_colour[0] > 240 and pixel_colour[1] > 240 and pixel_colour[2] > 240:
+                ready = True
+            else:
+                ready = False
+        if img.getpixel((self.get_card_coord(2)[2] + 50, self.get_card_coord(2)[1] + 50))[0] > 25:
+            ready = False
+        return ready

@@ -51,10 +51,11 @@ class Bot(object):
 screen = Screen(1)
 hand = Hand(screen)
 bot = Bot(hand, screen, "q")
-for i in range(1,5):
-    rank = hand.determine_rank(i)
-    hand.set_card_rank(i, rank)
-    suit = hand.determine_suit(i)
-    hand.set_card_suit(i, suit)
-print(hand.get_hand())
-print(bot.calculate_action())
+#for i in range(1,5):
+#    rank = hand.determine_rank(i)
+#    hand.set_card_rank(i, rank)
+#    suit = hand.determine_suit(i)
+#    hand.set_card_suit(i, suit)
+#print(hand.get_hand())
+#print(bot.calculate_action())
+print(hand.get_cards_status())
