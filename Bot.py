@@ -34,18 +34,32 @@ class Bot(object):
         evs = r.text.split(" ")
         return 3 if float(evs[0]) > float(evs[1]) else 4
 
-    def add_to_queue(self, card):
+    def add_to_queue(self, card=0, coord=()):
         """
-        Adds a coordinate to the queue representing card to be picked.
+        Adds a coordinate to the queue representing area to be clicked.
+        :param coord: optional tuple of coordinates to add to queue.
         :param card: Card to add to queue [3,4]
         :return: None
         """
+        if coord:
+            self._queue.put(coord)
+            return
         if card == 3:
             location = self.hand.get_card_coord(3)
             self._queue.put((location[0] + 20, location[1] + 20))
-        else:
+        elif card == 4:
             location = self.hand.get_card_coord(4)
             self._queue.put((location[0] + 20, location[1] + 20))
+
+    def start(self):
+        # Get deal button
+        deal_button = self._screen.deal_button
+        deal_button_pixel_colour = deal_button.getpixel((2, 2))[0]
+        if deal_button_pixel_colour <= 250:
+            print("\tWaiting for deal button..")
+        while not deal_button.getpixel((2, 2))[0] >= 200:  # Deal button not ready
+            deal_button = ImageGrab.grab((deal_button[0], deal_button[1], deal_button[0] + 3, deal_button[1] + 3))
+        self.add_to_queue(self._screen.deal_button)
 
 
 screen = Screen(1)

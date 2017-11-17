@@ -12,7 +12,7 @@ class Screen(object):
         self._x_offset = 0  # Half the horizontal res
         self._y_offset = 0  # Half the vertical res
         self.screen = self.get_screen(number)
-        self._deal_button = ()
+        self.deal_button = ()
         if path:
             pytesseract.pytesseract.tesseract_cmd = path
         else:
@@ -75,6 +75,7 @@ class Screen(object):
                                      self._y_offset + card_boxes[3][1],
                                      self._x_offset + card_boxes[3][0] + card_boxes[3][2],
                                      self._y_offset + card_boxes[3][1] + card_boxes[3][3])}
+        self.get_deal_button(coords)
         return coords
 
     def get_deal_button(self, coords):
@@ -83,4 +84,4 @@ class Screen(object):
         :return: Tuple, dealbutton coordinates.
         """
         coord = coords["card3"]["coord"]
-        self._deal_button = (coord[0], coord[3] + ((coord[3] - coord[1]) // 3))
+        self.deal_button = (coord[0], coord[3] + ((coord[3] - coord[1]) // 3))
