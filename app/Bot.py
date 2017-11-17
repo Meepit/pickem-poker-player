@@ -27,6 +27,10 @@ class Bot(object):
         return 'http://www.beatingbonuses.com/pick_exec.php?player=' + "%20".join(output) + url_suffix
 
     def calculate_action(self):
+        """
+        Using API request, chooses between cards 3 and 4 for the highest EV.
+        :return: int in [3,4]
+        """
         url = self.build_url()
         try:
             r = requests.get(url)
@@ -54,6 +58,10 @@ class Bot(object):
             self._queue.put((location[0] + 20, location[1] + 20))
 
     def start(self):
+        """
+        Waits for cards to be dealt, detects rank and suit, choose highest EV card, wait for deal button.
+        :return: None
+        """
         while True:
             print("Waiting for cards")
             while not self._hand.get_cards_status():

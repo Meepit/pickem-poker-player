@@ -15,12 +15,21 @@ class Hand(object):
         self.suits = Suits
 
     def get_hand(self):
+        """
+        Return string representation of hand
+        :return: str
+        """
         str = ""
         for i in range(1, 5):
             str += self._cards["card{0}".format(i)]["rank"] + self._cards["card{0}".format(i)]["suit"] + " "
         return str
 
     def get_card_coord(self, card_num):
+        """
+        Returns coordinates of a card
+        :param card_num: Number between 1 and 4 inclusive.
+        :return: tuple of coordinates.
+        """
         try:
             return self._cards["card{0}".format(card_num)]["coord"]
         except KeyError:
@@ -54,6 +63,11 @@ class Hand(object):
             print("Card {0} has no suit set".format(card_num))
 
     def determine_rank(self, card_num):
+        """
+        Uses tesseract OCR to detect the rank of a card. Retries if invalid detection.
+        :param card_num: int, card number between 1-4 inclusive.
+        :return: rank_str, a string of the rank.
+        """
         self.validate_card_num(card_num)
         # Rank makes up about 27% of the card, suit makes up about 25%
         coords = self.get_card_coord(card_num)
@@ -73,6 +87,11 @@ class Hand(object):
         return rank_str
 
     def determine_suit(self, card_num):
+        """
+        Captures image of suit, resizes and compares filesize to predefined sizes to determine suit.
+        :param card_num:  int, card number between 1-4 inclusive.
+        :return: string character in [H,S,C,D] representing card suit.
+        """
         self.validate_card_num(card_num)
         coords = self.get_card_coord(card_num)
         suit_offset = int((coords[3] - coords[1]) * 0.25)

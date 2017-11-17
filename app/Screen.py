@@ -41,7 +41,8 @@ class Screen(object):
         """
         :param img: PIL image object
         Convert to cv2 image, using image contours find coordinates of 4 cards and set them.
-        :return: Dist of
+        Sets deal button coordinates
+        :return: Dict of card coordinates.
         """
         print("Getting locations")
         im = np.array(img)
