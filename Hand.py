@@ -23,38 +23,37 @@ class Hand(object):
         except KeyError:
             print("Invalid card, card_num must be an integer between 1-4 inclusive")
 
-    def set_card_rank(self, card_num, rank):
+    @staticmethod
+    def validate_card_num():
         if card_num not in range(1, 5):
             raise ValueError('card_num must be an integer between 1-4 inclusive')
+
+    def set_card_rank(self, card_num, rank):
+        validate_card_num()
         self._cards["card{0}".format(card_num)]["rank"] = rank
 
     def set_card_suit(self, card_num, suit):
-        if card_num not in range(1, 5):
-            raise ValueError('card_num must be an integer between 1-4 inclusive')
+        validate_card_num()
         self._cards["card{0}".format(card_num)]["suit"] = suit
 
     def get_card_rank(self, card_num):
-        if card_num not in range(1, 5):
-            raise ValueError('card_num must be an integer between 1-4 inclusive')
+        validate_card_num()
         try:
             return self._cards["card{0}".format(card_num)]["rank"]
         except KeyError:
             print("Card {0} has no rank set".format(card_num))
 
     def get_card_suit(self, card_num):
-        if card_num not in range(1, 5):
-            raise ValueError('card_num must be an integer between 1-4 inclusive')
+        validate_card_num()
         try:
             return self._cards["card{0}".format(card_num)]["suit"]
         except KeyError:
             print("Card {0} has no suit set".format(card_num))
 
     def determine_rank(self, card_num):
-        if card_num not in range(1, 5):
-            raise ValueError('card_num must be an integer between 1-4 inclusive')
+        validate_card_num()
         # Rank makes up about 27% of the card, suit makes up about 25%
         coords = self.get_card_coord(card_num)
-        print(coords)
         x1, y1, x2, y2 = coords
         rank_offset = int((coords[3] - coords[1]) * 0.27)
         rank = ImageGrab.grab((x1, y1, x1 + rank_offset, y1 + rank_offset))
@@ -71,8 +70,7 @@ class Hand(object):
         return rank_str
 
     def determine_suit(self, card_num):
-        if card_num not in range(1, 5):
-            raise ValueError('card_num must be an integer between 1-4 inclusive')
+        validate_card_num()
         coords = self.get_card_coord(card_num)
         suit_offset = int((coords[3] - coords[1]) * 0.25)
         x1, y1, x2, y2 = coords
@@ -91,7 +89,6 @@ class Hand(object):
             abs_diff_spade = abs(suit_filesize - self.suits["spade"])
             abs_diff_club = abs(suit_filesize - self.suits["club"])
             if self.get_card_rank(card_num) == "Q":  # Bottom part of Queen clips into suit causing misdetection.
-                print("Checking Q")
                 abs_diff_spade = abs(suit_filesize - self.suits["q_spade"])
             return "C" if abs_diff_club < abs_diff_spade else "S"
 

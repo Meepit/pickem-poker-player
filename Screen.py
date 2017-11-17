@@ -13,10 +13,9 @@ class Screen(object):
         self._y_offset = 0  # Half the vertical res
         self.screen = self.get_screen(number)
         self.deal_button = ()
+        pytesseract.pytesseract.tesseract_cmd = 'C:/Program Files (x86)/Tesseract-OCR/tesseract'
         if path:
             pytesseract.pytesseract.tesseract_cmd = path
-        else:
-            pytesseract.pytesseract.tesseract_cmd = 'C:/Program Files (x86)/Tesseract-OCR/tesseract'
 
     def get_screen(self, section):
         """
