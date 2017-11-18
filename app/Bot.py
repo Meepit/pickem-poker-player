@@ -69,6 +69,11 @@ class Bot(object):
             time.sleep(0.5)  # failsafe
             # get card ranks and suits
             self._hand.get_ranks_and_suits()
+            # Temporary fix to get around the issue of pickem poker client slowing down causing early detection#
+            if self._hand.get_card_rank(1):
+                print("Retrying to be safe.")
+                self._hand.get_ranks_and_suits()
+            # End temp fix #
             print(self._hand.get_hand())
             action = self.calculate_action()
             self.add_to_queue(card=action)
