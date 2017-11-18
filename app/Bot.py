@@ -68,11 +68,7 @@ class Bot(object):
                 pass
             time.sleep(0.5)  # failsafe
             # get card ranks and suits
-            for i in range(1, 5):
-                rank = self._hand.determine_rank(i)
-                self._hand.set_card_rank(i, rank)
-                suit = self._hand.determine_suit(i)
-                self._hand.set_card_suit(i, suit)
+            self._hand.get_ranks_and_suits()
             print(self._hand.get_hand())
             action = self.calculate_action()
             self.add_to_queue(card=action)

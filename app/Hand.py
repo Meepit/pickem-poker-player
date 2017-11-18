@@ -62,6 +62,13 @@ class Hand(object):
         except KeyError:
             print("Card {0} has no suit set".format(card_num))
 
+    def get_ranks_and_suits(self):
+        for i in range(1, 5):
+            rank = self.determine_rank(i)
+            self.set_card_rank(i, rank)
+            suit = self.determine_suit(i)
+            self.set_card_suit(i, suit)
+
     def determine_rank(self, card_num):
         """
         Uses tesseract OCR to detect the rank of a card. Retries if invalid detection.
