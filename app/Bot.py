@@ -70,7 +70,7 @@ class Bot(object):
             # get card ranks and suits
             self._hand.get_ranks_and_suits()
             # Temporary fix to get around the issue of pickem poker client slowing down causing early detection#
-            if self._hand.get_card_rank(1):
+            if self._hand.get_card_rank(1).lower() == "K":
                 print("Retrying to be safe.")
                 self._hand.get_ranks_and_suits()
             # End temp fix #

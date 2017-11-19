@@ -41,6 +41,6 @@ if __name__ == '__main__':
         time.sleep(0.1)
         win32api.mouse_event(win32con.MOUSEEVENTF_LEFTUP, 0, 0)
         time.sleep(0.1)
-        if next_action not in [i.deal_button for i in [bot1, bot2, bot3, bot4]]:
+        if next_action not in [i._screen.deal_button for i in [bot1, bot2, bot3, bot4]]:
             hands_played += 1
             print("Total  hands played: {0}".format(hands_played))
